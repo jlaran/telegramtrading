@@ -4,9 +4,9 @@ const axios = require('axios');
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const API_KEY = process.env.API_KEY;
-const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
+const API_KEY = process.env.{API_KEY};
+const BOT_TOKEN = process.env.{TELEGRAM_BOT_TOKEN};
+const CHANNEL_ID = process.env.{TELEGRAM_CHANNEL_ID};
 
 // Importante: usar texto plano para compatibilidad con MT5
 app.use(express.text({ type: "*/*" }));
