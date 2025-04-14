@@ -46,6 +46,30 @@ app.use((req, res, next) => {
   next();
 });
 
+app.post('/delete-id', express.json(), (req, res) => {
+  const { id } = req.body;
+  if (!id) return res.status(400).send('Falta el campo "id"');
+  
+  const success = deleteIdEntry(id);
+  res.setHeader('Content-Type', 'text/plain');
+  if (success) {
+    res.send(`ID "${id}" eliminado.`);
+  } else {
+    res.status(404).send(`ID "${id}" no encontrado.`);
+  }
+});
+
+function deleteIdEntry(id) {
+  const idMap = readIdMap();
+  if (idMap[id]) {
+    delete idMap[id];
+    writeIdMap(idMap);
+    console.log(`🗑️ Entrada con ID "${id}" eliminada.`);
+    return true;
+  }
+  return false;
+}
+
 app.post('/send-message', async (req, res) => {
   try {
     const raw = req.body;
@@ -58,6 +82,8 @@ app.post('/send-message', async (req, res) => {
       res.setHeader('Content-Type', 'text/plain');
       return res.status(400).send('Missing message');
     }
+
+    console.log(`💾 Guardado en idMap.json: ${id} ↔ message_id: ${messageId}`);
 
     const idMap = readIdMap(); // Leer el archivo actual
 
