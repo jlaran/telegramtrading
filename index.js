@@ -23,6 +23,17 @@ function readIdMap() {
   }
 }
 
+function deleteIdEntry(id) {
+  const idMap = readIdMap();
+  if (idMap[id]) {
+    delete idMap[id];
+    writeIdMap(idMap);
+    console.log(`🗑️ Entrada con ID "${id}" eliminada.`);
+    return true;
+  }
+  return false;
+}
+
 // Guardar archivo de forma segura
 function writeIdMap(data) {
   try {
@@ -31,7 +42,6 @@ function writeIdMap(data) {
     console.error("❌ Error escribiendo idMap.json:", err.message);
   }
 }
-
 
 // Importante: usar texto plano para compatibilidad con MT5
 app.use(express.text({ type: "*/*" }));
@@ -95,6 +105,20 @@ app.post('/send-message', async (req, res) => {
     res.status(400).send('Invalid JSON');
   }
 });
+
+app.post('/delete-id', express.json(), (req, res) => {
+  const { id } = req.body;
+  if (!id) return res.status(400).send('Falta el campo "id"');
+  
+  const success = deleteIdEntry(id);
+  res.setHeader('Content-Type', 'text/plain');
+  if (success) {
+    res.send(`ID "${id}" eliminado.`);
+  } else {
+    res.status(404).send(`ID "${id}" no encontrado.`);
+  }
+});
+
 
 // app.post('/send-message', async (req, res) => {
 //     try {
