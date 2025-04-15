@@ -63,6 +63,7 @@ app.post('/send-message', async (req, res) => {
     const data = JSON.parse(cleaned);
     const message = data.message;
     const id = data.id;
+    const signalType = data.signalType;
 
     if (!message) {
       res.setHeader('Content-Type', 'text/plain');
@@ -70,10 +71,20 @@ app.post('/send-message', async (req, res) => {
     }
 
     const idMap = readIdMap(); // Leer el archivo actual
+    let channelID = '';
+
+    // Enviar mensaje
+    if (signalType == 'deriv'){
+      channelID = CHANNEL_ID_DERIV;
+    } else if(signalType == 'weltrade'){
+      channelID = CHANNEL_ID_WELTRADE;
+    } else if(signalType == 'forex'){
+      channelID = CHANNEL_ID_FOREX;
+    }
 
     // Armar el payload del mensaje
     const payload = {
-      chat_id: CHANNEL_ID,
+      chat_id: channelID,
       text: message,
       parse_mode: "HTML"
     };
@@ -83,7 +94,6 @@ app.post('/send-message', async (req, res) => {
       payload.reply_to_message_id = idMap[id];
     }
 
-    // Enviar mensaje
     const response = await axios.post(
       `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
       payload
