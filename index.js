@@ -7,7 +7,9 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.API_KEY;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
+const CHANNEL_ID_DERIV = process.env.TELEGRAM_CHANNEL_ID_DERIV;
+const CHANNEL_ID_WELTRADE = process.env.TELEGRAM_CHANNEL_ID_WELTRADE;
+const CHANNEL_ID_FOREX = process.env.TELEGRAM_CHANNEL_ID_FOREX;
 
 const DB_PATH = path.join(__dirname, 'idMap.json');
 
